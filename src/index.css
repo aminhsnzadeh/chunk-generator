@@ -8,7 +8,16 @@
     position: fixed;
     top: 2rem;
     left: 2rem;
-    width: 700px;
-    height: 350px;
+    padding: 1rem;
     background: white;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: calc(600px + 4rem);
+}
+
+.fixed-debugger > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }

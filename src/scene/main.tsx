@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
 import useSceneController from "../controls/scene.ts";
-import CalcDebugger from "../worldgen/debugger.tsx";
+import CalcDebugger from "../worldgen/_debugger.tsx";
 
 export default function MainScene() {
     const { azimuth, elevation, genDebugger } = useSceneController();
