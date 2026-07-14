@@ -3,3 +3,12 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.fixed-debugger {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    width: 700px;
+    height: 350px;
+    background: white;
+}
