@@ -4,10 +4,10 @@ import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
 import useSceneController from "../controls/scene.ts";
-import CalcDebugger from "../worldgen/_debugger.tsx";
+import CalcDebugger from "../worldgen/preview/debugger.tsx";
 
 export default function MainScene() {
-    const { azimuth, elevation, genDebugger } = useSceneController();
+    const { azimuth, elevation, previewCalculations } = useSceneController();
 
     const sunPosition = useMemo(() => {
         const phi = THREE.MathUtils.degToRad(90 - elevation);
@@ -25,7 +25,7 @@ export default function MainScene() {
 
                 <OrbitControls maxPolarAngle={2} maxDistance={400} />
             </Canvas>
-            {genDebugger && <CalcDebugger />}
+            {previewCalculations && <CalcDebugger />}
         </>
     );
 }

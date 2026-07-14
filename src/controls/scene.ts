@@ -15,7 +15,7 @@ export default function useSceneController() {
             max: 90,
             step: 1
         },
-        genDebugger: true
+        previewCalculations: true
     });
 
     return controls;
