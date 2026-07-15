@@ -2,7 +2,8 @@ import {useEffect, useRef} from 'react';
 import useWorldGenController from "../../controls/worldgen.ts";
 import createWorldGenerator from "../world-generator.ts";
 import {biomeColor} from "../biome.ts";
-import {elevationColor, moistureColor, temperatureColor} from "./colors.ts";
+import {elevationColor, moistureColor, temperatureColor, waterColor} from "./colors.ts";
+import useDebouncedConfig from "../../hooks/useDebouncedConfig.ts";
 
 function grayscale(v: number) {
     const t = Math.max(0, Math.min(1, (v + 1) / 2));
@@ -31,21 +32,31 @@ function drawLayer<T>(canvas: HTMLCanvasElement | null, sampleFn: (x: number, z:
 }
 
 export default function WorldGenDebugger({ size = 200 }) {
+    const config = useWorldGenController();
+
     const elevRef = useRef(null)
     const moistRef = useRef(null)
     const tempRef = useRef(null)
     const biomeRef = useRef(null)
+    const waterRef = useRef(null)
 
-    const { seed } = useWorldGenController()
+    const debouncedConfig = useDebouncedConfig(config, 400);
 
+// instant - elevation/moisture/temperature/biome
     useEffect(() => {
-        const world = createWorldGenerator(seed);
+        const world = createWorldGenerator(config);
+        drawLayer(elevRef.current!, (x, z) => world.getElevation(x, z), size, elevationColor);
+        drawLayer(moistRef.current!, (x, z) => world.getMoisture(x, z), size, moistureColor);
+        drawLayer(tempRef.current!, (x, z) => world.getTemperature(x, z), size, temperatureColor);
+        drawLayer(biomeRef.current!, (x, z) => world.getBiome(x, z), size, biomeColor);
+    }, [config, size]);
 
-        drawLayer(elevRef.current, (x: number, z: number) => world.getElevation(x, z), size, elevationColor);
-        drawLayer(moistRef.current, (x: number, z: number) => world.getMoisture(x, z), size, moistureColor);
-        drawLayer(tempRef.current, (x: number, z: number) => world.getTemperature(x, z), size, temperatureColor);
-        drawLayer(biomeRef.current, (x: number, z: number) => world.getBiome(x, z), size, biomeColor);
-    }, [seed, size])
+// debounced - rivers only
+    useEffect(() => {
+        const world = createWorldGenerator(debouncedConfig);
+        world.ensureHydrology(0, 0, size);
+        drawLayer(waterRef.current!, (x, z) => world.getWaterFeature(x, z), size, waterColor);
+    }, [debouncedConfig, size]);
 
     return (
         <div className="fixed-debugger">
@@ -64,6 +75,10 @@ export default function WorldGenDebugger({ size = 200 }) {
             <div>
                 <p>Biome :</p>
                 <canvas ref={biomeRef} width={200} height={200} />
+            </div>
+            <div>
+                <p>Rivers :</p>
+                <canvas ref={waterRef} width={200} height={200} />
             </div>
         </div>
     );

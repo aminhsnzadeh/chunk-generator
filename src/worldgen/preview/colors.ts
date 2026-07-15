@@ -25,8 +25,15 @@ function temperatureColor(value: number): [number, number, number] {
     return [r, g, b];
 }
 
+function waterColor(value: "river" | "lake" | null): [number, number, number] {
+    if (value === 'river') return [70, 140, 220];
+    if (value === 'lake') return [50, 100, 180];
+    return [230, 220, 190];
+}
+
 export {
     temperatureColor,
     moistureColor,
-    elevationColor
+    elevationColor,
+    waterColor
 }
