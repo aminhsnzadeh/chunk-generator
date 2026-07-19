@@ -1,4 +1,4 @@
-import { BIOME, BIOME_COLORS, ELEVATION, MOISTURE, TEMPERATURE } from "../@data/world-constants.ts";
+import { BIOME, BIOME_COLORS, ELEVATION, MOISTURE, TEMPERATURE } from "../../@data/world-constants.ts";
 
 export interface BandConfig {
     ocean: number;

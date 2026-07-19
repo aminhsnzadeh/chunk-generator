@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 import useWorldGenController from "../../controls/worldgen.ts";
 import createWorldGenerator from "../world-generator.ts";
-import {biomeColor} from "../biome.ts";
+import {biomeColor} from "../world/biome.ts";
 import {elevationColor, moistureColor, temperatureColor, waterColor} from "./colors.ts";
 import useDebouncedConfig from "../../hooks/useDebouncedConfig.ts";
 

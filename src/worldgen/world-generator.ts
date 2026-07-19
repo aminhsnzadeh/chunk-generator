@@ -1,8 +1,8 @@
 import { deriveSeed } from './rng.js';
 import { buildPermutationTable, fbm } from './noise.js';
-import { classifyBiome, getElevationBand } from "./biome.ts";
-import {buildRegionHeightmap, computeFlowAccumulation, computeFlowDirections, fillDepressions, filterIsolatedRivers, isLake, isRiver} from "./hydrology.ts";
+import {buildRegionHeightmap, computeFlowAccumulation, computeFlowDirections, fillDepressions, filterIsolatedRivers, isLake, isRiver} from "./world/hydrology.ts";
 import type { WorldGenConfig } from "../controls/worldgen.ts";
+import {classifyBiome, getElevationBand} from "./world/biome.ts";
 
 export default function createWorldGenerator(config: WorldGenConfig) {
     const seed = config.seed;

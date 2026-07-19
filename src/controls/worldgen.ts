@@ -1,6 +1,7 @@
 // controls/scene.ts
 import { useControls } from "leva";
 
+
 export interface WorldGenConfig {
     seed: number;
     elevation: { scale: number; octaves: number; lacunarity: number; gain: number; exaggeration: number };

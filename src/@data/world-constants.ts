@@ -36,6 +36,22 @@ const BIOME = {
     SNOW_PEAK: "snowpeak",
 }
 
+const BIOME_INDEX: Record<string, number> = {
+    DEEP_OCEAN: 0,
+    OCEAN: 1,
+    BEACH: 2,
+    DESERT: 3,
+    PLAINS: 4,
+    FOREST: 5,
+    RAINFOREST: 6,
+    HILLS: 7,
+    TUNDRA: 8,
+    MOUNTAIN: 9,
+    SNOW: 10,
+    TAIGA: 11,
+    SNOW_PEAK: 12,
+}
+
 const BIOME_COLORS: Record<string, [number, number, number]> = {
     deepocean: [30, 80, 150],
     ocean: [40, 90, 160],
@@ -55,5 +71,6 @@ export {
     MOISTURE,
     TEMPERATURE,
     BIOME_COLORS,
-    BIOME
+    BIOME,
+    BIOME_INDEX
 }
