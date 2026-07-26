@@ -18,9 +18,9 @@ export interface WorldGenConfig {
 function useWorldGenController(): WorldGenConfig {
     const elevation = useControls('Elevation', {
         scale: { value: 80, min: 20, max: 300, step: 1 },
-        octaves: { value: 5, min: 1, max: 8, step: 1 },
+        octaves: { value: 3, min: 1, max: 8, step: 1 },
         lacunarity: { value: 2, min: 1.5, max: 3, step: 0.05 },
-        gain: { value: 0.5, min: 0.2, max: 0.8, step: 0.01 },
+        gain: { value: 0.4, min: 0.2, max: 0.8, step: 0.01 },
         exaggeration: { value: 1, min: 0.3, max: 2, step: 0.05 }, // "total elevation" control
     });
 
