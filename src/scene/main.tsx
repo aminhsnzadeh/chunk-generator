@@ -24,14 +24,28 @@ export default function MainScene() {
 
     return (
         <>
-            <Canvas style={{ width: '100%', height: '100vh' }} camera={{ position: [100, 120, 100], fov: 60 }}>
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[100, 100, 50]} intensity={1} />
+            <Canvas gl={{ logarithmicDepthBuffer: true }} shadows style={{ width: '100%', height: '100vh' }} camera={{ position: [100, 120, 100], fov: 60 }}>
+
+                <ambientLight intensity={0.35} />
+                <hemisphereLight args={['#bcd8ff', '#5c6e4e', 0.4]} />
+                <directionalLight
+                    position={[100, 100, 50]}
+                    intensity={1.2}
+                    castShadow
+                    shadow-mapSize={[2048, 2048]}
+                    shadow-camera-left={-160}
+                    shadow-camera-right={160}
+                    shadow-camera-top={160}
+                    shadow-camera-bottom={-160}
+                    shadow-camera-near={10}
+                    shadow-camera-far={500}
+                    shadow-bias={-0.0005}
+                />
 
                 <Sky sunPosition={sunPosition} />
 
-                <ChunkedWorld config={config} chunkSize={32} renderDistance={3} worldPosition={worldPositionRef?.current}  />
-                <WaterPlane seaLevel={config.seaLevel} heightScale={20} chunkSize={32} renderDistance={3} worldPosition={worldPositionRef?.current} />
+                <ChunkedWorld config={config} chunkSize={64} renderDistance={3} worldPosition={worldPositionRef?.current}  />
+                <WaterPlane seaLevel={config.seaLevel} heightScale={20} chunkSize={64} renderDistance={3} worldPosition={worldPositionRef?.current} />
 
                 <OrbitControls maxPolarAngle={1} maxDistance={400} />
             </Canvas>

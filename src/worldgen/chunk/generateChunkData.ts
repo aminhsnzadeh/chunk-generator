@@ -2,6 +2,7 @@ import type {WorldGenConfig} from "../../controls/worldgen.ts";
 import { chunkOrigin } from './chunk';
 import createWorldGenerator from "../world-generator.ts";
 import {BIOME_INDEX} from "../../@data/world-constants.ts";
+import {generateVegetation, type VegetationInstance} from "./vegetation.ts";
 
 export interface ChunkData {
     cx: number
@@ -10,6 +11,7 @@ export interface ChunkData {
     heights: Float32Array
     biomes: Uint8Array
     waterFeatures: Uint8Array
+    vegetation: VegetationInstance[]
 }
 
 export function generateChunkData(
@@ -43,5 +45,11 @@ export function generateChunkData(
         }
     }
 
-    return { cx, cz, size: verticesPerSide, heights, biomes, waterFeatures }
+    const vegetation = generateVegetation(
+        originX, originZ, chunkSize,
+        heights, biomes, waterFeatures,
+        config.seed, config.vegetation.density
+    )
+
+    return { cx, cz, size: verticesPerSide, heights, biomes, waterFeatures, vegetation }
 }

@@ -48,6 +48,7 @@ function classifyBiome(
 ) {
     const band = getElevationBand(elevation, bands);
 
+    if (band === 'deep ocean') return BIOME.DEEP_OCEAN;
     if (band === 'ocean') return BIOME.OCEAN;
     if (band === 'beach') return BIOME.BEACH;
     if (band === 'peak') return temperature < 0 ? BIOME.SNOW : BIOME.MOUNTAIN;
