@@ -36,6 +36,10 @@ const BIOME = {
     SNOW_PEAK: "snowpeak",
 }
 
+const BIOME_INDEX: Record<string, number> = Object.fromEntries(
+    Object.values(BIOME).map((biomeValue, i) => [biomeValue, i])
+);
+
 const BIOME_COLORS: Record<string, [number, number, number]> = {
     deepocean: [30, 80, 150],
     ocean: [40, 90, 160],
@@ -50,10 +54,22 @@ const BIOME_COLORS: Record<string, [number, number, number]> = {
     snow: [235, 235, 240],
 }
 
+const BIOME_COLOR_TABLE: [number, number, number][] = Object.values(BIOME).map(
+    (biomeValue) => BIOME_COLORS[biomeValue] ?? [255, 0, 255]
+);
+
+const WATER_COLORS: Record<number, [number, number, number]> = {
+    1: [70, 140, 220],
+    2: [50, 100, 180],
+}
+
 export {
     ELEVATION,
     MOISTURE,
     TEMPERATURE,
     BIOME_COLORS,
-    BIOME
+    BIOME,
+    BIOME_INDEX,
+    WATER_COLORS,
+    BIOME_COLOR_TABLE
 }

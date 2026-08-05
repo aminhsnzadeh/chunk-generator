@@ -1,25 +1,46 @@
 import { deriveSeed } from './rng.js';
 import { buildPermutationTable, fbm } from './noise.js';
-import { classifyBiome, getElevationBand } from "./biome.ts";
-import {buildRegionHeightmap, computeFlowAccumulation, computeFlowDirections, fillDepressions, filterIsolatedRivers, isLake, isRiver} from "./hydrology.ts";
+import {buildRegionHeightmap, computeFlowAccumulation, computeFlowDirections, fillDepressions, filterIsolatedRivers, isLake, isRiver} from "./world/hydrology.ts";
 import type { WorldGenConfig } from "../controls/worldgen.ts";
+import {classifyBiome, getElevationBand} from "./world/biome.ts";
+
+function smoothstep(edge0: number, edge1: number, x: number) {
+    const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+    return t * t * (3 - 2 * t);
+}
 
 export default function createWorldGenerator(config: WorldGenConfig) {
     const seed = config.seed;
 
     const elevPerm = buildPermutationTable(deriveSeed(seed, 'elevation'));
+    const ridgePerm = buildPermutationTable(deriveSeed(seed, 'mountains'));
     const moistPerm = buildPermutationTable(deriveSeed(seed, 'moisture'));
     const tempPerm = buildPermutationTable(deriveSeed(seed, 'temperature'));
 
-    const getElevation = (x: number, z: number) =>
-        fbm(
+    const getElevation = (x: number, z: number) => {
+        let e = fbm(
             elevPerm,
             x / config.elevation.scale,
             z / config.elevation.scale,
             config.elevation.octaves,
             config.elevation.lacunarity,
             config.elevation.gain
-        ) * config.elevation.exaggeration;
+        );
+
+        // redistribution: flatten lowlands, stretch high ground for stronger contrast
+        const k = config.elevation.exponent;
+        e = Math.sign(e) * Math.pow(Math.abs(e), k);
+
+        // ridged noise layered only onto high ground -> craggy, taller mountains
+        const mask = smoothstep(config.mountain.start, config.mountain.start + 0.35, e);
+        if (mask > 0) {
+            const r = fbm(ridgePerm, x / config.mountain.scale, z / config.mountain.scale, config.mountain.octaves);
+            const ridge = Math.pow(1 - Math.abs(r), config.mountain.sharpness);
+            e += mask * ridge * config.mountain.amount;
+        }
+
+        return e * config.elevation.exaggeration;
+    };
 
     const getMoisture = (x: number, z: number) =>
         fbm(moistPerm, x / config.moisture.scale, z / config.moisture.scale, config.moisture.octaves);
@@ -35,6 +56,7 @@ export default function createWorldGenerator(config: WorldGenConfig) {
         const key = JSON.stringify({
             seed, originX, originZ, size,
             elevation: config.elevation,
+            mountain: config.mountain,
             moisture: config.moisture,
             river: config.river,
         });
